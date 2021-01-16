@@ -1,23 +1,27 @@
-import { Router } from "express";
-import { v4 as uuid } from "uuid";
+import { Router } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+import { startOfHour, parseISO } from 'date-fns';
 
 const appointmentRoute = Router();
 
-var appointments = [];
+const appointments = [];
 
-appointmentRoute.post("/", (request, response) => {
+appointmentRoute.post('/', (request, response) => {
     const { provider, date } = request.body;
 
+    // dating save
+    const parsedDate = startOfHour(parseISO(date));
+
     const appointment = {
-        uuidv4(),
+        id: uuidv4(),
         provider,
-        date,
+        parsedDate,
     };
 
     appointments.push(appointment);
 
     return response.json({
-        appointment
+        appointment,
     });
 });
 
